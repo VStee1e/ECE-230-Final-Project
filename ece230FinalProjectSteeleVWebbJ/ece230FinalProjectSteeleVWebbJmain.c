@@ -27,14 +27,6 @@
 #define SOUNDSPEED 34300.0*pow(10,-6) //centimeters per microsecond
 #define THRESHOLD 5 //centimeters to turn on and off LED
 
-#define NOTECNT 3
-// Note A4 - 440 Hz, B4 - 493.88 Hz, C5 - 523.26 Hz
-#define NOTEA4  27273
-#define NOTEB4  24297
-#define NOTEC5  22933
-//#define notes[] = {NOTEA4, NOTEB4, NOTEC5}
-const uint16_t notePeriods[3] = {NOTEA4, NOTEB4, NOTEC5};
-
 int main(void)
 {
 #define DELAYTIME 2000000
@@ -42,12 +34,11 @@ int main(void)
     float ObjectDistance;
     float PulseWidth;
 
-    volatile uint32_t weakDelay = 0;
-    int noteIndex = 0;
-
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
     //Use External 48MHz oscillator; Set MCLK at 48 MHz for CPU; Set SMCLK at 48 MHz
     configHFXT();    //LED1 to indicate distance
+
+
 
     for(delaycount=0; delaycount<DELAYTIME; delaycount++);
 
