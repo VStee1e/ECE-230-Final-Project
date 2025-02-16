@@ -12,6 +12,11 @@
 
 
 #include "msp.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include "csHFXT.h"
+#include "csLFXT.h"
+
 
 //TEST COMMIT!!
 /**
