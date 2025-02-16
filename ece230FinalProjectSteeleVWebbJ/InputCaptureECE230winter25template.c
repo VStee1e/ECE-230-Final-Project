@@ -29,7 +29,7 @@
 void InputCaptureConfiguration_TA02(void) {
 
 //trigger pin on HC-SR04 to start eight 40kHz burst
-//TODO - configure InputCaptureTrigger as general output pin
+//DONE - configure InputCaptureTrigger as general output pin
 InputCaptureTriggerPort->DIR |= InputCaptureTrigger;
 InputCaptureTriggerPort->SEL0 &= ~InputCaptureTrigger;
 InputCaptureTriggerPort->SEL1 &= ~InputCaptureTrigger;
