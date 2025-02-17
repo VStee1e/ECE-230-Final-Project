@@ -53,6 +53,8 @@ int main(void)
         if(ObjectDistance<THRESHOLD)   {
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)", ObjectDistance, PulseWidth);
             printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
+            speakerBlare();
+            setServoAngle(10);
         }
         else   {
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)", ObjectDistance, PulseWidth);
@@ -62,8 +64,10 @@ int main(void)
     }; //end while(1)
 } //end main()
 
-void TA0_N_IRQHandler() {
-
-}
+//void TA2_N_IRQHandler() {
+//
+//    if()
+//
+//}
 
 
