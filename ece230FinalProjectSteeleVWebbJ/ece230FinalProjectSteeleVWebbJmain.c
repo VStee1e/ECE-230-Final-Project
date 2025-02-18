@@ -19,13 +19,15 @@
 #include "csHFXT.h"
 #include "csLFXT.h"
 #include <InputCaptureECE230winter25.h>
+#include "speakerDriver.h"
+#include "servoDriverTemplate_vws.h"
 
 //TEST COMMIT!!
 /**
  * main.c
  */
 #define SOUNDSPEED 34300.0*pow(10,-6) //centimeters per microsecond
-#define THRESHOLD 5 //centimeters to turn on and off LED
+#define THRESHOLD 30 //centimeters to turn on and off LED
 
 int main(void)
 {
@@ -33,6 +35,8 @@ int main(void)
     unsigned int delaycount;
     float ObjectDistance;
     float PulseWidth;
+    volatile uint32_t degreeLoop = 0;
+
 
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
     //Use External 48MHz oscillator; Set MCLK at 48 MHz for CPU; Set SMCLK at 48 MHz
@@ -43,6 +47,8 @@ int main(void)
     for(delaycount=0; delaycount<DELAYTIME; delaycount++);
 
     InputCaptureConfiguration_TA02();
+    configSpeaker();
+    ConfigureServo();
 
     __enable_irq();
 
@@ -53,8 +59,11 @@ int main(void)
         if(ObjectDistance<THRESHOLD)   {
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)", ObjectDistance, PulseWidth);
             printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
+            for(degreeLoop = 10; degreeLoop > 0; degreeLoop--){
+                incrementTenDegree();
+//                i++;
+            }
             speakerBlare();
-            setServoAngle(10);
         }
         else   {
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)", ObjectDistance, PulseWidth);

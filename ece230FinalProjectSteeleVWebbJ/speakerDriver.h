@@ -11,8 +11,8 @@ extern "C"
 #define NOTEA4  27273
 #define NOTEB4  24297
 #define NOTEC5  22933
+//const uint16_t notePeriods[3] = { NOTEA4, NOTEB4, NOTEC5 };
 //#define notes[] = {NOTEA4, NOTEB4, NOTEC5}
-const uint16_t notePeriods[3] = { NOTEA4, NOTEB4, NOTEC5 };
 
 extern void configSpeaker(void);
 

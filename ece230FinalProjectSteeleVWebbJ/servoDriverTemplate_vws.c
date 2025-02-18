@@ -5,7 +5,7 @@
  * Date: January 11, 2024
  * Description: Servo motor driver for MSP432P4111 Launchpad.
  *              Assumes SMCLK configured with 48MHz HFXT as source.
- *              Uses Timer_A2 and P5.6 (TA2.1)
+ *              Uses TIMER_A2 and P5.6 (TA2.1)
  *
  *                 MSP432P4111
  *             -------------------
@@ -37,17 +37,17 @@ void ConfigureServo(void) {
     ServoControl_Port->SEL1 &= ~(ServoControl_Pin);
     ServoControl_Port->OUT &= ~(ServoControl_Pin);
 
-    /* Configure Timer_A2 and CCR1 */
-    // Set period of Timer_A2 in CCR0 register for Up Mode
-    TIMER_A2->CCR[4] = SERVO_TMR_PERIOD;
+    /* Configure TIMER_A2 and CCR1 */
+    // Set period of TIMER_A2 in CCR0 register for Up Mode
+    TIMER_A2->CCR[0] = SERVO_TMR_PERIOD;
     // Set initial positive pulse-width of PWM in CCR1 register
-    TIMER_A2->CCR[5] = SERVO_MIN_ANGLE;
+    TIMER_A2->CCR[1] = SERVO_MIN_ANGLE;
 
-    // DONE configure TA2CCR1 for Compare mode, Reset/Set output mode, with interrupt disabled
-    TIMER_A2->CCTL[5] = 0x00E4;
-    // Configure Timer_A2 in Up Mode, with source SMCLK, prescale 16:1, and
+    // DONE configure TA0CCR5 for Compare mode, Reset/Set output mode, with interrupt disabled
+    TIMER_A2->CCTL[1] = 0x00E4;
+    // Configure TIMER_A2 in Up Mode, with source SMCLK, prescale 16:1, and
     //  interrupt disabled  -  tick rate will be 3MHz (for SMCLK = 48MHz)
-    // DONE configure Timer_A2 (requires setting control AND expansion register)
+    // DONE configure TIMER_A2 (requires setting control AND expansion register)
     TIMER_A2->CTL = 0x0290;
     TIMER_A2->EX0 = 0x07;
 }
@@ -59,7 +59,7 @@ void incrementTenDegree(void) {
         pulseWidthTicks = SERVO_MIN_ANGLE;
     }
     // DONE update CCR1 register to set new positive pulse-width
-    TIMER_A2->CCR[5] = pulseWidthTicks;
+    TIMER_A2->CCR[1] = pulseWidthTicks;
 }
 
 #define minRPM 1.0
@@ -72,7 +72,7 @@ void setServoAngle(float rpm) {
     angle_count = (float) SERVO_MIN_ANGLE + (rpm-minRPM)*(SERVO_MAX_ANGLE-SERVO_MIN_ANGLE)/(float)(maxRPM-minRPM);
 //DONE set servo angle count value. Cast integers to float to calculate float values correctly
     pulseWidthTicks = (int) angle_count;
-    TIMER_A2->CCR[5] = pulseWidthTicks;
+    TIMER_A2->CCR[1] = pulseWidthTicks;
        //set servo position
 }
 
