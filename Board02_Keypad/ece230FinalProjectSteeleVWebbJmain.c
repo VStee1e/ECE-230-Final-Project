@@ -20,7 +20,8 @@
 #include <InputCaptureECE230winter25.h>
 #include "speakerDriver.h"
 #include "servoDriverTemplate_vws.h"
-#include "lcd8bits.h"
+#include "keypadscan_subroutines_v1.h"
+//#include "lcd8bits.h"
 
 //TEST COMMIT!!
 /**
@@ -52,9 +53,14 @@ int main(void)
     //UART A0
     ConfigureUART_A0();
     //8-bit LCD
-    lcd8bits_init();
+//    lcd8bits_init();
+    printf("keyscan started: press a key on your 4x4 keypad ....\r\n");
+    kepadconfiguration();
 
     __enable_irq();
+
+    KeypadPort->OUT = (KeypadPort->OUT & (~KeypadOutputPins))
+            | (KeypadInputPins & KeypadOutputPins);
 
     while (1)
     {
@@ -97,6 +103,25 @@ int main(void)
         }
         for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
             ;
+
+        if (NewKeyPressed == YES)
+        {
+            NewKeyPressed = NO;
+            //TODO instead printing foundKey, do something else.
+            printf("Key Found: %d \r\n", FoundKey);
+            // if PASSKEY:
+            // trigger interrupt handler that stops alarm
+            // communicate with other msp board
+        }
+        if (FoundKey == 1)
+        {
+            for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
+            {
+                decrementTenDegree();
+                //                i++;
+            }
+            speakerOff();
+        }
     }; //end while(1)
 } //end main()
 
