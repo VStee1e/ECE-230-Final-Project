@@ -17,3 +17,5 @@ extern "C"
 extern void configSpeaker(void);
 
 extern void speakerBlare(void);
+
+extern void speakerOff(void);

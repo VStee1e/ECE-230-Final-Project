@@ -84,6 +84,7 @@ extern void ConfigureServo(void);
  */
 extern void incrementTenDegree(void);
 
+extern void decrementTenDegree(void);
 
 /*!
  * \brief This function sets angle of servo

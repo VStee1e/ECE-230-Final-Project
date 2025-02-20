@@ -31,6 +31,13 @@
 #include <stdbool.h>
 #include "csHFXT.h"
 #include "speakerDriver.h"
+#include "keypadscan_subroutines_v1.h"
+enum Status
+{
+    NO, YES
+};
+extern char NewKeyPressed;
+extern char FoundKey;
 
 ///* TODO add note defines */
 //#define NOTECNT 3
@@ -102,7 +109,7 @@ void speakerBlare(void)
     // DONE configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
-    while (1)
+    while (FoundKey!=1)
     {
         for (weakDelay = 1000000; weakDelay > 0; weakDelay--)
         {
@@ -150,7 +157,7 @@ void speakerOff(void)
     // DONE configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
-    while (1)
+    while (FoundKey==1)
     {
         for (weakDelay = 1000000; weakDelay > 0; weakDelay--)
         {

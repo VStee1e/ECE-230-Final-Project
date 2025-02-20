@@ -30,6 +30,13 @@
 #define SOUNDSPEED 34300.0*pow(10,-6) //centimeters per microsecond
 #define THRESHOLD 30 //centimeters to turn on and off LED
 
+enum Status
+{
+    NO, YES
+};
+extern char NewKeyPressed;
+extern char FoundKey;
+
 int main(void)
 {
 #define DELAYTIME 2000000
@@ -67,18 +74,28 @@ int main(void)
         PulseWidth = getEchoPulse_TA02();
         ObjectDistance = (float) SOUNDSPEED * PulseWidth / 2.0;
 
+        if (NewKeyPressed == YES)
+        {
+            NewKeyPressed = NO;
+            //DONE instead printing foundKey, do something else.
+            printf("Key Found: %d \r\n", FoundKey);
+            // if PASSKEY:
+            // trigger interrupt handler that stops alarm
+            // communicate with other msp board
+        }
+
         if (ObjectDistance < THRESHOLD)
         {
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
                    ObjectDistance, PulseWidth);
             printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
 
-            lcd_SetLineNumber(FirstLine);
-            sprintf(Buffer, "INTRUDER");
-            lcd_puts(Buffer);
-            sprintf(Buffer, "ALERT!!");
-            lcd_SetLineNumber(SecondLine);
-            lcd_puts(Buffer);
+//            lcd_SetLineNumber(FirstLine);
+//            sprintf(Buffer, "INTRUDER");
+//            lcd_puts(Buffer);
+//            sprintf(Buffer, "ALERT!!");
+//            lcd_SetLineNumber(SecondLine);
+//            lcd_puts(Buffer);
 
             for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
             {
@@ -86,6 +103,16 @@ int main(void)
 //                i++;
             }
             speakerBlare();
+
+            if (FoundKey == 1)
+            {
+                for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
+                {
+                    decrementTenDegree();
+                    //                i++;
+                }
+                speakerOff();
+            }
         }
         else
         {
@@ -93,41 +120,16 @@ int main(void)
                    ObjectDistance, PulseWidth);
             printf("\r\n The distance is more than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
 
-            lcd_SetLineNumber(FirstLine);
-            sprintf(Buffer, "I <3 YOU");
-            lcd_puts(Buffer);
-            sprintf(Buffer, "SAMMOUD");
-            lcd_SetLineNumber(SecondLine);
-            lcd_puts(Buffer);
+//            lcd_SetLineNumber(FirstLine);
+//            sprintf(Buffer, "I <3 YOU");
+//            lcd_puts(Buffer);
+//            sprintf(Buffer, "SAMMOUD");
+//            lcd_SetLineNumber(SecondLine);
+//            lcd_puts(Buffer);
 
         }
         for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
             ;
 
-        if (NewKeyPressed == YES)
-        {
-            NewKeyPressed = NO;
-            //TODO instead printing foundKey, do something else.
-            printf("Key Found: %d \r\n", FoundKey);
-            // if PASSKEY:
-            // trigger interrupt handler that stops alarm
-            // communicate with other msp board
-        }
-        if (FoundKey == 1)
-        {
-            for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
-            {
-                decrementTenDegree();
-                //                i++;
-            }
-            speakerOff();
-        }
     }; //end while(1)
 } //end main()
-
-//void TA2_N_IRQHandler() {
-//
-//    if()
-//
-//}
-
