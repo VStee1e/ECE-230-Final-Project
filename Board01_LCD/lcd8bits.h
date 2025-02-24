@@ -1,6 +1,6 @@
 //File Name: lcd8bits.h
 //Author: Vance Steele
-//Date: Feb 06, 2025
+//Date: Feb 24, 2025
 //ECE230-02 Winter 2024-2025
 
 #define LCDCMD_ClearDisplay     0x01    //clear display: clear, move cursor home

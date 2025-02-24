@@ -1,6 +1,6 @@
 /*  ECE230 Final Project main.c File
  * Created by Vance Steele and John Webb
- * Date: Feb 16, 2025
+ * Date: Feb 24, 2025
  *
  * Description: Uses ultrasonic sensor and interrupts to capture and trigger LCD screen,
  *              speaker, and various LEDS, as well as turn a servo motor. A keypad is
@@ -22,7 +22,6 @@
 #include "servoDriverTemplate_vws.h"
 #include "lcd8bits.h"
 
-//TEST COMMIT!!
 /**
  * main.c
  */
@@ -100,9 +99,4 @@ int main(void)
     }; //end while(1)
 } //end main()
 
-//void TA2_N_IRQHandler() {
-//
-//    if()
-//
-//}
 
