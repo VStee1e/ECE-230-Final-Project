@@ -77,7 +77,7 @@ char FoundKey;
 //char FindKey(void) {
 char FindKey(const char KeyPatterns[])
 {
-#define DEBOUNCETIME 500
+#define DEBOUNCETIME 1500
     char i;
     char KeyNumber;
     char PortValue;

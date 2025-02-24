@@ -106,12 +106,12 @@ int main(void)
 
             if (FoundKey == 1)
             {
+                speakerOff();
                 for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
                 {
                     decrementTenDegree();
                     //                i++;
                 }
-                speakerOff();
             }
         }
         else
