@@ -1,7 +1,8 @@
 //File Name: keypadscan_subroutines.c
-//Author: Jianjian Song
-//ECE230-01/02 Winter 2023-2024
-//Date: January 28 2024
+//Author: John Webb and Vance Steele
+//Used template by Dr. Jianjian Song
+//ECE230-01/02 Winter 2024-2025
+//Date: February 24 2025
 //Purpose: Scan a 4x4 keypad to provide key numbers from 1 to 16
 //         if a corresponding key is pressed
 //         key_number is 0 if no key is pressed
@@ -115,10 +116,9 @@ char FindKey(const char KeyPatterns[])
 void PORT4_IRQHandler(void)
 {
     uint32_t status;
-    /// TODO: encode/map values to the matrix key values
+    // encode/map values to the matrix key values
 
     FoundKey = FindKey(KeyPatterns);
-    //char found = FoundKey
     switch (FoundKey)
     {
     case 1:

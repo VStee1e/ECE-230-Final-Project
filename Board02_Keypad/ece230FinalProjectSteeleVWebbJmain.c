@@ -6,7 +6,7 @@
  *              speaker, and various LEDS, as well as turn a servo motor. A keypad is
  *              then used with interrupts to disable the speaker and LEDs, while also
  *              changing the LCD display and turning the servo motor back to its
- *              starting position.
+ *              starting position. This version does not have the LCD screen
  *
  */
 
@@ -19,11 +19,9 @@
 #include "csLFXT.h"
 #include <InputCaptureECE230winter25.h>
 #include "speakerDriver.h"
-#include "servoDriverTemplate_vws.h"
+#include "servoDriver.h"
 #include "keypadscan_subroutines_v1.h"
-//#include "lcd8bits.h"
 
-//TEST COMMIT!!
 /**
  * main.c
  */
@@ -51,16 +49,13 @@ int main(void)
     configHFXT();    //LED1 to indicate distance
     configLFXT();
 
-    for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
-        ;
+    for (delaycount = 0; delaycount < DELAYTIME; delaycount++);
 
     InputCaptureConfiguration_TA02();
     configSpeaker();
     ConfigureServo();
     //UART A0
     ConfigureUART_A0();
-    //8-bit LCD
-//    lcd8bits_init();
     printf("keyscan started: press a key on your 4x4 keypad ....\r\n");
     kepadconfiguration();
 
@@ -77,7 +72,6 @@ int main(void)
         if (NewKeyPressed == YES)
         {
             NewKeyPressed = NO;
-            //DONE instead printing foundKey, do something else.
             printf("Key Found: %d \r\n", FoundKey);
             // if PASSKEY:
             // trigger interrupt handler that stops alarm
@@ -90,17 +84,9 @@ int main(void)
                    ObjectDistance, PulseWidth);
             printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
 
-//            lcd_SetLineNumber(FirstLine);
-//            sprintf(Buffer, "INTRUDER");
-//            lcd_puts(Buffer);
-//            sprintf(Buffer, "ALERT!!");
-//            lcd_SetLineNumber(SecondLine);
-//            lcd_puts(Buffer);
-
             for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
             {
                 incrementTenDegree();
-//                i++;
             }
             speakerBlare();
 
@@ -110,7 +96,6 @@ int main(void)
                 for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
                 {
                     decrementTenDegree();
-                    //                i++;
                 }
             }
         }
@@ -119,13 +104,6 @@ int main(void)
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
                    ObjectDistance, PulseWidth);
             printf("\r\n The distance is more than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
-
-//            lcd_SetLineNumber(FirstLine);
-//            sprintf(Buffer, "I <3 YOU");
-//            lcd_puts(Buffer);
-//            sprintf(Buffer, "SAMMOUD");
-//            lcd_SetLineNumber(SecondLine);
-//            lcd_puts(Buffer);
 
         }
         for (delaycount = 0; delaycount < DELAYTIME; delaycount++)

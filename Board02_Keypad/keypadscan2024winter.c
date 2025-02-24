@@ -1,7 +1,8 @@
 //keypadscan2024winter.c
-//Jianjian Song
+//John Webb and Vance Steele
+//Template by Jianjian Song
 //ECE230-01/02
-//Date: January 28, 2024
+//Date: February 24, 2025
 //Test code to verify
 //Purpose: Scan a 4x4 keypad to provide key numbers from 1 to 16
 //         if a corresponding key is pressed
@@ -58,13 +59,11 @@ int main(void)
     __enable_irq();
 //clear keypad output pins to be 0 to be ready for input interrupt
 //Do not change input pin values
-   // KeypadPort->OUT=(KeypadPort->OUT & (~KeypadOutputPins));
         KeypadPort->OUT=(KeypadPort->OUT & (~KeypadOutputPins)) | (KeypadInputPins & KeypadOutputPins);
     while (1)
     {
         if(NewKeyPressed==YES) {
             NewKeyPressed=NO;
-            //TODO instead printing foundKey, do something else.
             printf("Key Found: %d \r\n", FoundKey);
             // if PASSKEY:
             // trigger interrupt handler that stops alarm
