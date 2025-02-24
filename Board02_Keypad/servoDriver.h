@@ -1,6 +1,6 @@
 /*! \file */
 /*!
- * servoDriverTemplate_jjs.h
+ * servoDriver.h
  * ECE230-01/02 Winter 2023-2024
  * Date: January 11, 2024
  *
@@ -51,7 +51,7 @@ extern "C"
 #define SERVO_MINIMUM   750 //us
 #define SERVO_MAXIMUM   2250    //us
 
-// TODO add tick count values for constants
+// tick count values for constants
 #define SERVO_TMR_PERIOD                37500        // ticks for 50Hz signal
 #define SERVO_MIN_ANGLE                 1115 //1750         // ticks for 0.75ms pulse
 #define SERVO_MAX_ANGLE                 3375 //7750        // ticks for 2.25ms pulse

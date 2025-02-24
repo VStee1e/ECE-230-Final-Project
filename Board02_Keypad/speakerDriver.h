@@ -5,7 +5,7 @@ extern "C"
 
 #include "msp.h"
 
-/* TODO add note defines */
+/* Note defines */
 #define NOTECNT 3
 // Note A4 - 440 Hz, B4 - 493.88 Hz, C5 - 523.26 Hz
 #define NOTEA4  27273
