@@ -32,7 +32,7 @@
 #include "csHFXT.h"
 #include "speakerDriver.h"
 
-///* TODO add note defines */
+///* Note defines */
 //#define NOTECNT 3
 //// Note A4 - 440 Hz, B4 - 493.88 Hz, C5 - 523.26 Hz
 #define NOTEA4  27273
@@ -57,12 +57,12 @@ void configSpeaker(void)
     // Configure CCR1 for Compare mode with Set/Reset output
     //          - sets when Timer_A0 == CCR1
     //          - resets when Timer_A0 == CCR0
-    // DONE configure CCR3
+    // Configure CCR3
     TIMER_A0->CCTL[3] = 0b01100000;
 
     // Configure Timer_A0 in Up Mode with source SMCLK prescale 4:1
     //      Tick rate will be (48MHz/4) with rollover at value in CCR0
-    // DONE configure TIMER_A0
+    // Configure TIMER_A0
     TIMER_A0->CTL = 0b001010010100;
 }
 
@@ -92,12 +92,12 @@ void speakerBlare(void)
     // Configure CCR1 for Compare mode with Set/Reset output
     //          - sets when Timer_A0 == CCR1
     //          - resets when Timer_A0 == CCR0
-    // TODO configure CCR1
+    // Configure CCR1
     TIMER_A0->CCTL[1] = 0b01100000;
 
     // Configure Timer_A0 in Up Mode with source SMCLK prescale 4:1
     //      Tick rate will be (48MHz/4) with rollover at value in CCR0
-    // TODO configure Timer_A0
+    // Configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
     while (1)
@@ -109,21 +109,8 @@ void speakerBlare(void)
         noteIndex = (noteIndex + 1) % NOTECNT;
         TIMER_A0->CCR[0] = notePeriods[noteIndex] - 1;
         TIMER_A0->CCR[1] = (notePeriods[noteIndex] / 2) - 1;
-        /* TODO add note changing code (update compare registers) */
+        /* Note changing code (update compare registers) */
 
     }
 
-//    volatile uint32_t weakDelay = 0;
-//    int noteIndex = 0;
-//
-//    while (1)
-//    {
-//        for (weakDelay = 10000; weakDelay > 0; weakDelay--)
-//        {
-//
-//        }
-//        noteIndex = (noteIndex + 1) % NOTECNT;
-//        TIMER_A0->CCR[0] = notePeriods[noteIndex] - 1;
-//        TIMER_A0->CCR[3] = (notePeriods[noteIndex] / 2) - 1;
-//    }
 }

@@ -64,14 +64,12 @@ void ConfigureUART_A0(void) {
      * Refer to Section 24.3.10 of Technical Reference manual
      * BRCLK = 12000000, Baud rate = 57600
      *
-     * DONE calculate N and determine values for UCBRx, UCBRFx, and UCBRSx
-     *          values used in next two TODOs
      */
     EUSCI_A0->BRW=ClockPrescalerValue;
 
-    // DONE set clock prescaler in eUSCI_A0 baud rate control register
+    // Set clock prescaler in eUSCI_A0 baud rate control register
     EUSCI_A0->MCTLW = (SecondModulationStage<<8)+(FirstModulationStage<<4)+1;    //enalble oversampling
-    // DONE configure baud clock modulation in eUSCI_A0 modulation control register
+    // Configure baud clock modulation in eUSCI_A0 modulation control register
 
 
     EUSCI_A0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;    // Initialize eUSCI
@@ -102,14 +100,14 @@ void ConfigureUART_A1(void) {
      * Refer to Section 24.3.10 of Technical Reference manual
      * BRCLK = 12000000, Baud rate = 57600
      *
-     * DONE calculate N and determine values for UCBRx, UCBRFx, and UCBRSx
+     * Calculate N and determine values for UCBRx, UCBRFx, and UCBRSx
      *          values used in next two TODOs
      */
     EUSCI_A1->BRW=ClockPrescalerValue;
 
-    // DONE set clock prescaler in eUSCI_A0 baud rate control register
+    // Set clock prescaler in eUSCI_A0 baud rate control register
     EUSCI_A1->MCTLW = (SecondModulationStage<<8)+(FirstModulationStage<<4)+1;    //enalble oversampling
-    // DONE configure baud clock modulation in eUSCI_A0 modulation control register
+    // Configure baud clock modulation in eUSCI_A0 modulation control register
 
 
     EUSCI_A1->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;    // Initialize eUSCI
