@@ -69,12 +69,14 @@ void ConfigureUART_A0(void) {
      * Refer to Section 24.3.10 of Technical Reference manual
      * BRCLK = 12000000, Baud rate = 57600
      *
+     * TODO calculate N and determine values for UCBRx, UCBRFx, and UCBRSx
+     *          values used in next two TODOs
      */
     EUSCI_A0->BRW=ClockPrescalerValue;
 
-    // Set clock prescaler in eUSCI_A0 baud rate control register
+    // TODO set clock prescaler in eUSCI_A0 baud rate control register
     EUSCI_A0->MCTLW = (SecondModulationStage<<8)+(FirstModulationStage<<4)+1;    //enalble oversampling
-    // Configure baud clock modulation in eUSCI_A0 modulation control register
+    // TODO configure baud clock modulation in eUSCI_A0 modulation control register
 
 
     EUSCI_A0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;    // Initialize eUSCI
@@ -103,12 +105,14 @@ void ConfigureUART_A1(void) {
      * Refer to Section 24.3.10 of Technical Reference manual
      * BRCLK = 12000000, Baud rate = 57600
      *
+     * TODO calculate N and determine values for UCBRx, UCBRFx, and UCBRSx
+     *          values used in next two TODOs
      */
     EUSCI_A1->BRW=ClockPrescalerValue;
 
-    // Set clock prescaler in eUSCI_A0 baud rate control register
-    EUSCI_A1->MCTLW = (SecondModulationStage<<8)+(FirstModulationStage<<4)+1;    //enable oversampling
-    // Configure baud clock modulation in eUSCI_A0 modulation control register
+    // TODO set clock prescaler in eUSCI_A0 baud rate control register
+    EUSCI_A1->MCTLW = (SecondModulationStage<<8)+(FirstModulationStage<<4)+1;    //enalble oversampling
+    // TODO configure baud clock modulation in eUSCI_A0 modulation control register
 
 
     EUSCI_A1->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;    // Initialize eUSCI
@@ -142,18 +146,18 @@ char GetChar_A0(void) {
 } //end GetChar(void)
 
 // UART interrupt service routine
-void EUSCIA0_IRQHandler(void)
-{
-    if (EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
-    {
-        // Check if the TX buffer is empty first
-        while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-
-        // Echo the received character back
-        //  Note that reading RX buffer clears the flag and removes value from buffer
-        EUSCI_A0->TXBUF = EUSCI_A0->RXBUF;
-    }
-}
+//void EUSCIA0_IRQHandler(void)
+//{
+//    if (EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
+//    {
+//        // Check if the TX buffer is empty first
+//        while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+//
+//        // Echo the received character back
+//        //  Note that reading RX buffer clears the flag and removes value from buffer
+//        EUSCI_A0->TXBUF = EUSCI_A0->RXBUF;
+//    }
+//}
 
 // UART interrupt service routine
 void EUSCIA1_IRQHandler(void)
