@@ -15,14 +15,14 @@ void process_received_data(void);
 volatile char rx_buffer[BUFFER_SIZE];
 volatile uint8_t rx_index = 0;
 
-int main(void) {
-    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD; // Stop watchdog timer
-    UART_Init();
-
-    while (1) {
-        // Main loop does nothing; data is received via interrupt
-    }
-}
+//int main(void) {
+//    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD; // Stop watchdog timer
+//    UART_Init();
+//
+//    while (1) {
+//        // Main loop does nothing; data is received via interrupt
+//    }
+//}
 
 void UART_Init(void) {
     EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST; // Put UART in reset mode

@@ -32,6 +32,7 @@
 #include "csHFXT.h"
 #include "speakerDriver.h"
 #include "UARTcommsDriver.h"
+#include "main.h"
 
 ///* Note defines */
 //#define NOTECNT 3
@@ -39,8 +40,13 @@
 #define NOTEA4  27273
 #define NOTEB4  24297
 #define NOTEC5  22933
+#define NOTEOFF 0
+#define BUFFER_SIZE 50
+
 ////#define notes[] = {NOTEA4, NOTEB4, NOTEC5}
 const uint16_t notePeriods[3] = { NOTEA4, NOTEB4, NOTEC5 };
+const uint16_t offNotes[1] = { NOTEOFF };
+
 
 void configSpeaker(void)
 {
@@ -73,6 +79,9 @@ void speakerBlare(void)
     UART_Init();
 
     volatile uint32_t weakDelay = 0;
+    volatile char rx_buffer[BUFFER_SIZE];
+    volatile uint8_t rx_index = 0;
+    volatile uint8_t message_received = 0;
     int noteIndex = 0;
 
     /* Stop Watchdog timer */
@@ -103,15 +112,15 @@ void speakerBlare(void)
     TIMER_A0->CTL = 0b001010010100;
 
     while (message_received == 0)
+    {
+        for (weakDelay = 1000000; weakDelay > 0; weakDelay--)
         {
-            for (weakDelay = 1000000; weakDelay > 0; weakDelay--)
-            {
 
-            }
-            noteIndex = (noteIndex + 1) % NOTECNT;
-            TIMER_A0->CCR[0] = notePeriods[noteIndex] - 1;
-            TIMER_A0->CCR[1] = (notePeriods[noteIndex] / 2) - 1;
         }
+        noteIndex = (noteIndex + 1) % NOTECNT;
+        TIMER_A0->CCR[0] = notePeriods[noteIndex] - 1;
+        TIMER_A0->CCR[1] = (notePeriods[noteIndex] / 2) - 1;
+    }
 }
 
 void speakerOff(void)
@@ -120,6 +129,9 @@ void speakerOff(void)
     UART_Init();
 
     volatile uint32_t weakDelay = 0;
+    volatile char rx_buffer[BUFFER_SIZE];
+    volatile uint8_t rx_index = 0;
+    volatile uint8_t message_received = 0;
     int noteIndex = 0;
 
     /* Stop Watchdog timer */
@@ -163,21 +175,3 @@ void speakerOff(void)
     }
 }
 
-void EUSCIA0_IRQHandler(void)
-{
-    if (EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
-    { // If data received
-        char receivedChar = EUSCI_A0->RXBUF; // Read received character
-
-        if (receivedChar == '\n' || rx_index >= BUFFER_SIZE - 1)
-        {
-            rx_buffer[rx_index] = '\0'; // Null-terminate the string
-            message_received = 1;  // Set flag to indicate message arrival
-            rx_index = 0;  // Reset index for next message
-        }
-        else
-        {
-            rx_buffer[rx_index++] = receivedChar; // Store character in buffer
-        }
-    }
-}
