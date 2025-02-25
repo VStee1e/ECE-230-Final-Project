@@ -64,6 +64,15 @@ void incrementTenDegree(void) {
     TIMER_A2->CCR[1] = pulseWidthTicks;
 }
 
+void decrementTenDegree(void){
+    pulseWidthTicks -= TEN_DEGREE_TICKS;
+        if (pulseWidthTicks < SERVO_MIN_ANGLE) {
+            pulseWidthTicks = SERVO_MAX_ANGLE;
+        }
+        // DONE update CCR1 register to set new positive pulse-width
+        TIMER_A2->CCR[1] = pulseWidthTicks;
+}
+
 #define minRPM 1.0
 #define maxRPM 10.0
 

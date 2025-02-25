@@ -36,67 +36,109 @@ int main(void)
     float PulseWidth;
     volatile uint32_t degreeLoop = 0;
     char Buffer[200];
+    volatile char rx_buffer[BUFFER_SIZE];
+       volatile uint8_t rx_index = 0;
+       volatile uint8_t message_received = 0;
 
-    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
-    //Use External 48MHz oscillator; Set MCLK at 48 MHz for CPU; Set SMCLK at 48 MHz
-    configHFXT();    //LED1 to indicate distance
-    configLFXT();
+       WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
+       //Use External 48MHz oscillator; Set MCLK at 48 MHz for CPU; Set SMCLK at 48 MHz
+       configHFXT();    //LED1 to indicate distance
+       configLFXT();
 
-    for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
-        ;
+       for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
+           ;
 
-    InputCaptureConfiguration_TA02();
-    configSpeaker();
-    ConfigureServo();
-    //UART A0
-    ConfigureUART_A0();
-    //8-bit LCD
-    lcd8bits_init();
+       InputCaptureConfiguration_TA02();
+       configSpeaker();
+       ConfigureServo();
+       //UART A0
+       ConfigureUART_A0();
+       UART_Init();
+       //8-bit LCD
+       lcd8bits_init();
 
-    __enable_irq();
+       __enable_irq();
 
-    while (1)
-    {
-        PulseWidth = getEchoPulse_TA02();
-        ObjectDistance = (float) SOUNDSPEED * PulseWidth / 2.0;
+       while (1)
+       {
+           PulseWidth = getEchoPulse_TA02();
+           ObjectDistance = (float) SOUNDSPEED * PulseWidth / 2.0;
 
-        if (ObjectDistance < THRESHOLD)
-        {
-            printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
-                   ObjectDistance, PulseWidth);
-            printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
+           if (ObjectDistance < THRESHOLD)
+           {
+               printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
+                      ObjectDistance, PulseWidth);
+               printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
 
-            lcd_SetLineNumber(FirstLine);
-            sprintf(Buffer, "INTRUDER");
-            lcd_puts(Buffer);
-            sprintf(Buffer, "ALERT!!");
-            lcd_SetLineNumber(SecondLine);
-            lcd_puts(Buffer);
+               lcd_SetLineNumber(FirstLine);
+               sprintf(Buffer, "INTRUDER");
+               lcd_puts(Buffer);
+               sprintf(Buffer, "ALERT!!");
+               lcd_SetLineNumber(SecondLine);
+               lcd_puts(Buffer);
 
-            for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
-            {
-                incrementTenDegree();
-//                i++;
-            }
-            speakerBlare();
-        }
-        else
-        {
-            printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
-                   ObjectDistance, PulseWidth);
-            printf("\r\n The distance is more than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
+               for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
+               {
+                   incrementTenDegree();
+   //                i++;
+               }
+               speakerBlare();
+           }
 
-            lcd_SetLineNumber(FirstLine);
-            sprintf(Buffer, "I <3 YOU");
-            lcd_puts(Buffer);
-            sprintf(Buffer, "SAMMOUD");
-            lcd_SetLineNumber(SecondLine);
-            lcd_puts(Buffer);
+           if (message_received)
+           {
+               message_received = 0;  // Reset flag
 
-        }
-        for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
-            ;
-    }; //end while(1)
-} //end main()
+               if (strcmp(rx_buffer, "DISARMED") == 0)
+               {
+                   speakerOff();
+                   for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
+                   {
+                       decrementTenDegree();
+                   }
+                   lcd_SetLineNumber(FirstLine);
+                   sprintf(Buffer, "SYSTEM");
+                   lcd_puts(Buffer);
+                   sprintf(Buffer, "DISARMED");
+                   lcd_SetLineNumber(SecondLine);
+                   lcd_puts(Buffer);
+               }
 
+               else
+               {
+                   printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
+                          ObjectDistance, PulseWidth);
+                   printf("\r\n The distance is more than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
 
+                   lcd_SetLineNumber(FirstLine);
+                   sprintf(Buffer, "I <3 YOU");
+                   lcd_puts(Buffer);
+                   sprintf(Buffer, "SAMMOUD");
+                   lcd_SetLineNumber(SecondLine);
+                   lcd_puts(Buffer);
+
+               }
+               for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
+                   ;
+           }; //end while(1)
+       } //end main()
+
+   // UART Interrupt Service Routine (ISR)
+       void EUSCIA0_IRQHandler(void)
+       {
+           if (EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
+           { // If data received
+               char receivedChar = EUSCI_A0->RXBUF; // Read received character
+
+               if (receivedChar == '\n' || rx_index >= BUFFER_SIZE - 1)
+               {
+                   rx_buffer[rx_index] = '\0'; // Null-terminate the string
+                   message_received = 1;  // Set flag to indicate message arrival
+                   rx_index = 0;  // Reset index for next message
+               }
+               else
+               {
+                   rx_buffer[rx_index++] = receivedChar; // Store character in buffer
+               }
+           }
+       }
