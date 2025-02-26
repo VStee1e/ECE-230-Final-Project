@@ -45,29 +45,29 @@ enum Status {NO, YES};
 extern char NewKeyPressed;
 extern char FoundKey;
 
-int main(void)
-{
-    /* Stop Watchdog timer */
-    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
-
-    configHFXT();
-    ConfigureUART_A0();
-    printf("keyscan started: press a key on your 4x4 keypad ....\r\n");
-    kepadconfiguration();
+//int main(void)
+//{
+//    /* Stop Watchdog timer */
+//    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
+//
+//    configHFXT();
+//    ConfigureUART_A0();
+//    printf("keyscan started: press a key on your 4x4 keypad ....\r\n");
+//    kepadconfiguration();
     
 // Enable global interrupt
-    __enable_irq();
-//clear keypad output pins to be 0 to be ready for input interrupt
-//Do not change input pin values
-        KeypadPort->OUT=(KeypadPort->OUT & (~KeypadOutputPins)) | (KeypadInputPins & KeypadOutputPins);
-    while (1)
-    {
-        if(NewKeyPressed==YES) {
-            NewKeyPressed=NO;
-            printf("Key Found: %d \r\n", FoundKey);
-            // if PASSKEY:
-            // trigger interrupt handler that stops alarm
-            // communicate with other msp board
-        }
-    }
-} //end main()
+//    __enable_irq();
+////clear keypad output pins to be 0 to be ready for input interrupt
+////Do not change input pin values
+//        KeypadPort->OUT=(KeypadPort->OUT & (~KeypadOutputPins)) | (KeypadInputPins & KeypadOutputPins);
+//    while (1)
+//    {
+//        if(NewKeyPressed==YES) {
+//            NewKeyPressed=NO;
+//            printf("Key Found: %d \r\n", FoundKey);
+//            // if PASSKEY:
+//            // trigger interrupt handler that stops alarm
+//            // communicate with other msp board
+//        }
+//    }
+//} //end main()

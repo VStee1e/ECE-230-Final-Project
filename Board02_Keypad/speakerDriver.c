@@ -39,7 +39,6 @@ enum Status
 extern char NewKeyPressed;
 extern char FoundKey;
 
-///* TODO add note defines */
 //#define NOTECNT 3
 //// Note A4 - 440 Hz, B4 - 493.88 Hz, C5 - 523.26 Hz
 #define NOTEA4  27273
@@ -101,12 +100,10 @@ void speakerBlare(void)
     // Configure CCR1 for Compare mode with Set/Reset output
     //          - sets when Timer_A0 == CCR1
     //          - resets when Timer_A0 == CCR0
-    // DONE configure CCR1
     TIMER_A0->CCTL[1] = 0b01100000;
 
     // Configure Timer_A0 in Up Mode with source SMCLK prescale 4:1
     //      Tick rate will be (48MHz/4) with rollover at value in CCR0
-    // DONE configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
     while (FoundKey!=1)
@@ -118,8 +115,6 @@ void speakerBlare(void)
         noteIndex = (noteIndex + 1) % NOTECNT;
         TIMER_A0->CCR[0] = notePeriods[noteIndex] - 1;
         TIMER_A0->CCR[1] = (notePeriods[noteIndex] / 2) - 1;
-        /* TODO add note changing code (update compare registers) */
-
     }
 }
 
@@ -149,12 +144,10 @@ void speakerOff(void)
     // Configure CCR1 for Compare mode with Set/Reset output
     //          - sets when Timer_A0 == CCR1
     //          - resets when Timer_A0 == CCR0
-    // DONE configure CCR1
     TIMER_A0->CCTL[1] = 0b01100000;
 
     // Configure Timer_A0 in Up Mode with source SMCLK prescale 4:1
     //      Tick rate will be (48MHz/4) with rollover at value in CCR0
-    // DONE configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
     while (FoundKey==1)
@@ -166,7 +159,5 @@ void speakerOff(void)
         noteIndex = (noteIndex + 1) % NOTECNT;
         TIMER_A0->CCR[0] = offNotes[noteIndex] - 1;
         TIMER_A0->CCR[1] = (offNotes[noteIndex] / 2) - 1;
-        /* DONE add note changing code (update compare registers) */
-
     }
 }
