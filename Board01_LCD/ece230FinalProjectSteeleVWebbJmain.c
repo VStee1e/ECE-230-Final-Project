@@ -21,6 +21,7 @@
 #include "speakerDriver.h"
 #include "servoDriver.h"
 #include "lcd8bits.h"
+#include "ButtonDriver.h"
 
 /**
  * main.c
@@ -28,6 +29,10 @@
 #define SOUNDSPEED 34300.0*pow(10,-6) //centimeters per microsecond
 #define THRESHOLD 30 //centimeters to turn on and off LED
 #define BUFFER_SIZE 50
+
+void UART_Init(void);
+void InitializeSwitches(void);
+SwitchState CheckSwitch1(void);
 
 int main(void)
 {
@@ -37,14 +42,15 @@ int main(void)
     float PulseWidth;
     volatile uint32_t degreeLoop = 0;
     char Buffer[200];
-    volatile char rx_buffer[BUFFER_SIZE];
-    volatile uint8_t rx_index = 0;
-    volatile uint8_t message_received = 0;
+    SwitchState S1Status;
 
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
-    //Use External 48MHz oscillator; Set MCLK at 48 MHz for CPU; Set SMCLK at 48 MHz
-    configHFXT();    //LED1 to indicate distance
+    // Use External 48MHz oscillator; Set MCLK at 48 MHz for CPU; Set SMCLK at 48 MHz
+    configHFXT();
     configLFXT();
+    InitializeSwitches();
+
+    S1Status = NotPressed;
 
     for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
         ;
@@ -52,13 +58,10 @@ int main(void)
     InputCaptureConfiguration_TA02();
     configSpeaker();
     ConfigureServo();
-    //UART A0
-//    ConfigureUART_A0();
     UART_Init();
-    //8-bit LCD
     lcd8bits_init();
 
-    __enable_irq();
+    __enable_irq();  // Enable global interrupts
 
     while (1)
     {
@@ -69,81 +72,43 @@ int main(void)
         {
             printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
                    ObjectDistance, PulseWidth);
-            printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
+            printf("\r\n The distance is less than %d cm.\r\n", THRESHOLD);
 
             lcd_SetLineNumber(FirstLine);
-            sprintf(Buffer, "INTRUDER");
+            sprintf(Buffer, "INTRUDER ALERT!!");
             lcd_puts(Buffer);
-            sprintf(Buffer, "ALERT!!");
+            sprintf(Buffer, "FEAR FOR YO LIFE");
             lcd_SetLineNumber(SecondLine);
             lcd_puts(Buffer);
 
             for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
             {
                 incrementTenDegree();
-                //                i++;
             }
             speakerBlare();
         }
 
-        if (message_received)
+        S1Status = CheckSwitch1();
+        if (S1Status == Pressed)
         {
-            message_received = 0;  // Reset flag
-
-            if (strcmp(rx_buffer, "DISARMED") == 0)
+            //set S1Status as NotPressed
+            //turn on or off CurrentLED
+            S1Status = NotPressed;
+            // Check if a message was received via UART
+            for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
             {
-                speakerOff();
-                for (degreeLoop = 10; degreeLoop > 0; degreeLoop--)
-                {
-                    decrementTenDegree();
-                }
-                lcd_SetLineNumber(FirstLine);
-                sprintf(Buffer, "SYSTEM");
-                lcd_puts(Buffer);
-                sprintf(Buffer, "DISARMED");
-                lcd_SetLineNumber(SecondLine);
-                lcd_puts(Buffer);
+                decrementTenDegree();
             }
-
-            else
-            {
-                printf("\r\n object distance in %4.1f (cm)  pulse width %4.1f (us)",
-                       ObjectDistance, PulseWidth);
-                printf("\r\n The distance is more than %d cm.\r\n", THRESHOLD); //Replace w interrupt flag
-
-                lcd_SetLineNumber(FirstLine);
-                sprintf(Buffer, "I <3 YOU");
-                lcd_puts(Buffer);
-                sprintf(Buffer, "SAMMOUD");
-                lcd_SetLineNumber(SecondLine);
-                lcd_puts(Buffer);
-
-            }
-            for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
-                ;
-        }; //end while(1)
-    } //end main()
-}
-
-// UART Interrupt Service Routine (ISR)
-void EUSCIA0_IRQHandler(void)
-{
-    volatile char rx_buffer[BUFFER_SIZE];
-    volatile uint8_t rx_index = 0;
-    volatile uint8_t message_received = 0;
-    if (EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
-    { // If data received
-        char receivedChar = EUSCI_A0->RXBUF; // Read received character
-
-        if (receivedChar == '\n' || rx_index >= BUFFER_SIZE - 1)
-        {
-            rx_buffer[rx_index] = '\0'; // Null-terminate the string
-            message_received = 1;  // Set flag to indicate message arrival
-            rx_index = 0;  // Reset index for next message
-        }
-        else
-        {
-            rx_buffer[rx_index++] = receivedChar; // Store character in buffer
-        }
+            lcd_SetLineNumber(FirstLine);
+            sprintf(Buffer, "CORRECT CODE IN!");
+            lcd_puts(Buffer);
+            sprintf(Buffer, "ENJOY THE DAY!! :>");
+            lcd_SetLineNumber(SecondLine);
+            lcd_puts(Buffer);
+            speakerOff();
     }
-}
+
+    for (delaycount = 0; delaycount < DELAYTIME; delaycount++)
+        ;       ;
+}; //end while(1)
+} //end main()

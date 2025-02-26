@@ -31,8 +31,7 @@
 #include <stdbool.h>
 #include "csHFXT.h"
 #include "speakerDriver.h"
-#include "UARTcommsDriver.h"
-#include "main.h"
+#include "ButtonDriver.h"
 
 ///* Note defines */
 //#define NOTECNT 3
@@ -46,6 +45,7 @@
 ////#define notes[] = {NOTEA4, NOTEB4, NOTEC5}
 const uint16_t notePeriods[3] = { NOTEA4, NOTEB4, NOTEC5 };
 const uint16_t offNotes[1] = { NOTEOFF };
+
 
 
 void configSpeaker(void)
@@ -75,13 +75,12 @@ void configSpeaker(void)
 
 void speakerBlare(void)
 {
+    SwitchState S1Status;
+
     configHFXT();
     UART_Init();
 
     volatile uint32_t weakDelay = 0;
-    volatile char rx_buffer[BUFFER_SIZE];
-    volatile uint8_t rx_index = 0;
-    volatile uint8_t message_received = 0;
     int noteIndex = 0;
 
     /* Stop Watchdog timer */
@@ -111,7 +110,7 @@ void speakerBlare(void)
     // Configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
-    while (message_received == 0)
+    while (S1Status == NotPressed)
     {
         for (weakDelay = 1000000; weakDelay > 0; weakDelay--)
         {
@@ -125,13 +124,12 @@ void speakerBlare(void)
 
 void speakerOff(void)
 {
+    SwitchState S1Status;
+
     configHFXT();
     UART_Init();
 
     volatile uint32_t weakDelay = 0;
-    volatile char rx_buffer[BUFFER_SIZE];
-    volatile uint8_t rx_index = 0;
-    volatile uint8_t message_received = 0;
     int noteIndex = 0;
 
     /* Stop Watchdog timer */
@@ -161,7 +159,7 @@ void speakerOff(void)
     // DONE configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
-    while (message_received == 1)
+    while (1)
     {
         for (weakDelay = 1000000; weakDelay > 0; weakDelay--)
         {
