@@ -1,5 +1,6 @@
 //File Name: lcd8bits.h
 //Author: Vance Steele
+//Template by Dr. Jianjian Song
 //Date: Feb 24, 2025
 //ECE230-02 Winter 2024-2025
 

@@ -2,8 +2,9 @@
 /*!
  * servoDriver.h
  * Template by Dr. Jianjian Song
+ * Vance Steele and John Webb
  * ECE230-01/02 Winter 2024-2025
- * Date: January 11, 2025
+ * Date: February 25, 2025
  *
  * Description: Servo motor driver for MSP432P4111 Launchpad.
  *              Assumes SMCLK configured with 48MHz HFXT as source.

@@ -1,12 +1,12 @@
 /*! \file */
 /******************************************************************************
- * MSP432 Lab Exercise 4-2
+ * MSP432 Driver from Lab Exercise 4-2
  *
  * Description: Using timers and compare/capture modules to toggle output at
  *               frequency of musical notes to drive speaker. Device configuration
  *               to enable operation at MCLK=48MHz using HFXT source.
- * Author:
- * Last-modified:
+ * Author: Vance Steele and John Webb
+ * Last-modified: February 25, 2025
  *
  * An external HF crystal between HFXIN & HFXOUT is required for MCLK,SMCLK
  *
@@ -151,12 +151,12 @@ void speakerOff(void)
     // Configure CCR1 for Compare mode with Set/Reset output
     //          - sets when Timer_A0 == CCR1
     //          - resets when Timer_A0 == CCR0
-    // DONE configure CCR1
+    // Configure CCR1
     TIMER_A0->CCTL[1] = 0b01100000;
 
     // Configure Timer_A0 in Up Mode with source SMCLK prescale 4:1
     //      Tick rate will be (48MHz/4) with rollover at value in CCR0
-    // DONE configure Timer_A0
+    // Configure Timer_A0
     TIMER_A0->CTL = 0b001010010100;
 
     while (1)
@@ -168,7 +168,7 @@ void speakerOff(void)
         noteIndex = (noteIndex + 1) % NOTECNT;
         TIMER_A0->CCR[0] = offNotes[noteIndex] - 1;
         TIMER_A0->CCR[1] = (offNotes[noteIndex] / 2) - 1;
-        /* DONE add note changing code (update compare registers) */
+        /* Note changing code (update compare registers) */
 
     }
 }

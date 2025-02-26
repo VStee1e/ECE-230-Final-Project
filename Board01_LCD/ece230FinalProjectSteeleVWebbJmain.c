@@ -1,7 +1,7 @@
 /*  ECE230 Final Project main.c File
  * Created by Vance Steele and John Webb
  * Date: Feb 24, 2025
- *
+ * Used code from Dr. Song's exercise 6-1 Template
  * Description: Uses ultrasonic sensor and interrupts to capture and trigger LCD screen,
  *              speaker, and various LEDS, as well as turn a servo motor. A keypad is
  *              then used with interrupts to disable the speaker and LEDs, while also

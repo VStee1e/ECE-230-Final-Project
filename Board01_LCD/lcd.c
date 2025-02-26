@@ -1,6 +1,8 @@
-//File Name: lcd_template.c
+//File Name: lcd.c
+//Template by Dr. Jianjian Song
+// Vance Steele and John Webb
 //ECE230 Winter 2024-2025
-//Date: January 17, 2025
+//Date: February 25, 2025
 /*!
  * lcd.c
  *
@@ -83,11 +85,11 @@ void writeInstruction(uint8_t mode, uint8_t instruction) {
         LCD_RS_PORT->OUT &= ~LCD_RS_MASK;
     }
     // pulse E to execute instruction on LCD
-    // DONE set Enable signal high
+    // Set Enable signal high
     //      use bit-masking to avoid affecting other pins of port
     LCD_EN_PORT->OUT |= LCD_EN_MASK;
     delayMicroSec(1);
-    // DONE set Enable signal low
+    // Set Enable signal low
     //      use bit-masking to avoid affecting other pins of port
     LCD_EN_PORT->OUT &= ~LCD_EN_MASK;
     // delay to allow instruction execution to complete

@@ -1,6 +1,8 @@
-//File Name: lcd_template.h
+//File Name: lcd.h
+//Template by Dr. Jianjian Song
+// Vance Steele and John Webb
 //ECE230 Winter 2024-2025
-//Date: January 17, 2025
+//Date: February 25, 2025
 /*!
  * lcd.h
  *

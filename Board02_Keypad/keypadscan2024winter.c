@@ -45,6 +45,9 @@ enum Status {NO, YES};
 extern char NewKeyPressed;
 extern char FoundKey;
 
+
+// Below is commented out code that was to be used in UART communication
+
 //int main(void)
 //{
 //    /* Stop Watchdog timer */

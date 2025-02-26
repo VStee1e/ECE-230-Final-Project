@@ -1,5 +1,8 @@
 #ifdef __cplusplus
 extern "C"
+//From Lab Exercise 4-2
+//Template by Dr. Jianjian Song
+// Vance Steele and John Webb
 {
 #endif
 

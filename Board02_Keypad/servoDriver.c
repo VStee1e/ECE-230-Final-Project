@@ -60,7 +60,7 @@ void incrementTenDegree(void) {
     if (pulseWidthTicks > SERVO_MAX_ANGLE) {
         pulseWidthTicks = SERVO_MIN_ANGLE;
     }
-    // DONE update CCR1 register to set new positive pulse-width
+    // Update CCR1 register to set new positive pulse-width
     TIMER_A2->CCR[1] = pulseWidthTicks;
 }
 
@@ -69,7 +69,7 @@ void decrementTenDegree(void){
         if (pulseWidthTicks < SERVO_MIN_ANGLE) {
             pulseWidthTicks = SERVO_MAX_ANGLE;
         }
-        // DONE update CCR1 register to set new positive pulse-width
+        // Update CCR1 register to set new positive pulse-width
         TIMER_A2->CCR[1] = pulseWidthTicks;
 }
 

@@ -37,7 +37,7 @@ InputCaptureTriggerPort->SEL1 &= ~InputCaptureTrigger;
 
 
  //Configuring P2.5 as peripheral input for capture
- //DONE - configure InputCapturePin as secondary-mode input pin with no pull-up or pull-down
+ //Configure InputCapturePin as secondary-mode input pin with no pull-up or pull-down
 InputCapturePort->SEL0 |= InputCapturePin;
 InputCapturePort->SEL1 &= ~InputCapturePin;
 InputCapturePort->DIR &= ~InputCapturePin;
@@ -46,17 +46,14 @@ InputCapturePort->REN &= ~InputCapturePin;
 //Timer A0 continuous mode at 48MHz SMCLK and 48 prescaler
 //Use SMCLK AT at 48 MHz, continuous mode, interrupt disabled
 //bits9-8=0b10 SMCLK, bits7-6=ID=0b11, bits5-4=0b10 CONTINUOUS MODE, bit1=0 NO INTERRUPT
-//DONE
         TIMER_A0->CTL=0x2E4;   //bits7-6=ID
 //bits2-0 = TAIDEX = 0b101 = divide by 6
 //Prescaler  2^ID(TAIDEX+1)=2^3(5+1)=8X6=48 Timer clock = 48MHz/48=1MHz
 //maximum distance is 343meters(10^-6)((2^16)/2)/1MHz=11.239meters
-//DONE
         TIMER_A0->EX0 = 0b101;    //bits2-0=TAIDEX
 //Configuring Capture Mode: CCR2, Rising edge, CCIxA pin = P2.5, synchronous, no interrupt
 //bits15-14=01 on rising edge bits13-12=00 CCIxA bit8=1 for capture mode.
 //bit4=0 to disable interrupt. bit0=CCIFG capture interrupt flag
-//DONE
         TIMER_A0->CCTL[2]=0x4100;
 }
 

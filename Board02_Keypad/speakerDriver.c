@@ -1,12 +1,12 @@
 /*! \file */
 /******************************************************************************
- * MSP432 Lab Exercise 4-2
+ * MSP432 Driver from Lab Exercise 4-2
  *
  * Description: Using timers and compare/capture modules to toggle output at
  *               frequency of musical notes to drive speaker. Device configuration
  *               to enable operation at MCLK=48MHz using HFXT source.
- * Author:
- * Last-modified:
+ * Author: Vance Steele and John Webb
+ * Last-modified: February 25, 2025
  *
  * An external HF crystal between HFXIN & HFXOUT is required for MCLK,SMCLK
  *

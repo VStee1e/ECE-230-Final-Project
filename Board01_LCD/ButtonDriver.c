@@ -1,22 +1,12 @@
 /*
  * ButtonDriver.c
- *
+ * Code reused and modified from Project 2
  *  Created on: Feb 25, 2025
  *      Author: steelevw
  */
 
 #include "msp.h"
 #include "ButtonDriver.h"
-
-//typedef enum _SwitchState
-//{
-//    NotPressed, Pressed
-//} SwitchState;
-
-//typedef enum _SwitchState
-//{
-//    NotPressed, Pressed
-//} SwitchState;
 
 void debounce(void)
 {
